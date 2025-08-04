@@ -14,12 +14,7 @@ const firebaseConfig = {
 };
 const appId = process.env.appId; // Correction ici aussi
 const initialAuthToken = null;
-                    <p>Application de Devis - Généré le {new Date().toLocaleDateString('fr-FR')}</p>
-                </div>
-            </div>
-        </div>
-    );
-});
+
 
 function App() {
     const [db, setDb] = useState(null);
