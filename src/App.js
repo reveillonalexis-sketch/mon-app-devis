@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
@@ -16,68 +16,6 @@ const appId = process.env.appId; // Correction ici aussi
 const initialAuthToken = null;
 
 // Component for print-friendly quote view
-const PrintQuoteView = React.forwardRef(({ quote }, ref) => {
-    if (!quote) {
-        return <div className="text-center text-gray-500 p-8">Aucun devis sélectionné pour l'impression.</div>;
-    }
-
-    return (
-        <div ref={ref} className="p-8 font-sans text-gray-800 bg-white min-h-screen">
-            <style>
-                {`
-                /* Styles for print */
-                @page { size: A4; margin: 20mm; }
-                body { margin: 0; padding: 0; }
-                .print-container { width: 100%; max-width: 210mm; margin: 0 auto; }
-                .header, .footer { text-align: center; margin-bottom: 20px; }
-                .section-title { font-weight: bold; margin-top: 20px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
-                table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-                th, td { border: 1px solid #eee; padding: 8px; text-align: left; }
-                th { background-color: #f3f4f6; }
-                .text-right { text-align: right; }
-                .total-line { font-weight: bold; }
-                .total-grand { font-size: 1.2em; border-top: 2px solid #312e81; padding-top: 10px; margin-top: 10px; }
-                `}
-            </style>
-            <div className="print-container">
-                <div className="header">
-                    <h1 className="text-3xl font-bold text-indigo-700 mb-2">Devis N° {quote.quoteNumber}</h1>
-                    <p className="text-sm text-gray-600">Date: {quote.quoteDate}</p>
-                </div>
-
-                <div className="section-title">Informations Client</div>
-                <p><strong>Nom:</strong> {quote.clientName}</p>
-                <p><strong>Adresse:</strong> {quote.clientAddress}</p>
-                <p><strong>Email:</strong> {quote.clientEmail}</p>
-
-                <div className="section-title">Articles</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th className="text-right">Qté</th>
-                            <th className="text-right">Prix Achat</th>
-                            <th className="text-right">Marge (%)</th>
-                            <th className="text-right">Prix Unitaire</th>
-                            <th className="text-right">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {quote.lineItems.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.description}</td>
-                                <td className="text-right">{item.quantity}</td>
-                                <td className="text-right">{item.purchasePrice ? item.purchasePrice.toFixed(2) : '0.00'} €</td>
-                                <td className="text-right">{item.margin ? item.margin.toFixed(2) : '0.00'} %</td>
-                                <td className="text-right">{item.unitPrice.toFixed(2)} €</td>
-                                <td className="text-right">{(item.quantity * item.unitPrice).toFixed(2)} €</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-
-                <div className="text-right mt-8">
-                    <p className="total-line">Sous-total: {quote.subtotal.toFixed(2)} €</p>
                     <p className="total-line">TVA ({quote.taxRate}%): {quote.tax.toFixed(2)} €</p>
                     <p className="total-grand">Total Général: {quote.grandTotal.toFixed(2)} €</p>
                 </div>
@@ -159,7 +97,7 @@ function App() {
             };
             signIn();
         }
-    }, [auth, initialAuthToken, userId]);
+    }, [auth, userId]);
 
     // Fetch quotes when auth is ready and userId is available
     useEffect(() => {
