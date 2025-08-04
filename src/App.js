@@ -14,16 +14,6 @@ const firebaseConfig = {
 };
 const appId = process.env.appId; // Correction ici aussi
 const initialAuthToken = null;
-
-// Component for print-friendly quote view
-<>
-    <p className="total-line">TVA ({quote.taxRate}%): {quote.tax.toFixed(2)} €</p>
-    <p className="total-grand">Total Général: {quote.grandTotal.toFixed(2)} €</p>
-    </>
-                </div>
-
-                <div className="footer mt-16 text-sm text-gray-500">
-                    <p>Merci de votre confiance.</p>
                     <p>Application de Devis - Généré le {new Date().toLocaleDateString('fr-FR')}</p>
                 </div>
             </div>
